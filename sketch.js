@@ -1,139 +1,256 @@
 /*************************************************************************
-   Mood Shapes
+   Mood States
           by Maj Jenkins
+          Feb. 16, 2021
 
     Overview:
-    Testing setting up the localhost.
+    Test of setting up localhost, a state machine, arrays to organize assets, and sound.
  
     ---------------------------------------------------------------------
     Notes: 
-     (1)
+     (1) Issue: I tried to get the sound to activate upon page load, 
+     but couldn't figure out a way to do it that wouldn't have it on 
+     continously (I tried putting it in setup, which I know is only 
+     called once at the beginning of the load). Similarly, I couldn't
+     get the music to loop.
+     (2) I couldn't get the unicode arrow symbols or Javascript codes 
+     for arrow symbols to work, so in the control instructions message, 
+     I just used "LEFT ARROW" and "RIGHT ARROW".
 **************************************************************************/
-
 
 /*************************************************************************
 // Global variables
 **************************************************************************/
+// Variables of images, fonts, labels
+var images = [];
+var fonts = [];
+var defaultFont;
+var labels = ["cloudy", "UNKNOWABLE", "thinking about\nnear eastern vessel\nwith two feet\n(1000-800 BCE)", "OCEAN", "i do not want\nto do work\ni want to\ngo outside"];
+var bgColors = ["#C3E0E5", "#1a1f1e", "#856350", "#274472", "#5885AF"]
+var song = [];
+let playButton;
+let pauseButton;
 
-var gDebugMode = false;
-var w = 200;
-var h = 200;
+// Text position
+gTextOffset = 50;
 
+// Variable that is a function 
+var drawFunction;
 
+// Beginning the state at 0
+var stateNumber = 0;
 
 /*************************************************************************
 // Window resize
 **************************************************************************/
-
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+    resizeCanvas(windowWidth, windowHeight);
 }
 
 /*************************************************************************
 // Function preload
 **************************************************************************/
-let unknowable;
-let cloudy;
-let vessel;
-let ocean;
-let outside;
-
 function preload() {
-  unknowable = loadImage('assets/unknowable.png');
-  cloudy = loadImage('assets/cloudy.png');
-  vessel = loadImage('assets/vessel.png');
-  ocean = loadImage('assets/ocean.png');
-  outside = loadImage('assets/outside.png');
+  // The images, fonts, and music are all of pretty small sizes (images 
+  // are 600px width and height, music clips are 1 minute or less, so
+  // it should be OK to preload all the assets and not lag.)
+  // Images
+    images[0] = loadImage('assets/img/cloudy.png');
+    images[1] = loadImage('assets/img/unknowable.png');
+    images[2] = loadImage('assets/img/vessel.png');
+    images[3] = loadImage('assets/img/ocean.png');
+    images[4] = loadImage('assets/img/outside.png');
+  // Fonts
+    fonts[0] = loadFont('assets/fonts/cloudlike.otf');
+    fonts[1] = loadFont('assets/fonts/who_asks_satan.otf');
+    fonts[2] = loadFont('assets/fonts/fragment_core.otf');
+    fonts[3] = loadFont('assets/fonts/jd_wave.otf');
+    fonts[4] = loadFont('assets/fonts/weknow_windows.otf');
+    defaultFont = loadFont('assets/fonts/inconsolata.otf');
+  // Music
+    song[0] = loadSound('assets/sfx/wind.mp3');
+    song[1] = loadSound('assets/sfx/hum.mp3');
+    song[2] = loadSound('assets/sfx/clay.mp3');
+    song[3] = loadSound('assets/sfx/ocean.mp3');
+    song[4] = loadSound('assets/sfx/keyboard.mp3');
+  // Play-pause Button
+    playButton = loadImage('assets/play.png');
+    pauseButton = loadImage('assets/pause.png');
 }
 
 /*************************************************************************
 // Function setup
 **************************************************************************/
-
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  imageMode(CENTER);
-  rectMode(CENTER);
-  textAlign(CENTER);
- }
+    createCanvas(windowWidth, windowHeight);
+    imageMode(CENTER);
+    rectMode(CENTER);
+    textAlign(CENTER);
+    textSize(width/30);
+
+    // set to one for startup
+    drawFunction = drawOne;
+}
 
 /*************************************************************************
 // Function draw
 **************************************************************************/
-
 function draw() {
-  background('#B7CCD5');
-  fill('#fff');
-  stroke('#fff');
+    background('#B7CCD5');
+    fill('#fff');
+    noStroke();
+    // noCursor();
 
-  image(unknowable, 7*(width/8), height/4, w, h);
-  image(cloudy, width/3, height/3, w, h);
-  image(vessel, 3*(width/4), height - w*1, w*1.5, h*1.5);
-  image(ocean, 1*(width/5), height/1.5, w*3, h*3);
-  image(outside, 2*(width/3), height/3, w, h);
+    // Call the state machine function (a variable)
+    drawFunction();
 
+    // Instructions for controls and navigation
+    instructMessage();
 
-  // Fullscreen "Press [F] to fullscreen"
-  fsMessage();
-
-	// Toggle debug Mode
-  if( gDebugMode == true ) {
-    drawDebugInfo();
-  }
-
+    // Play button based upon if the song is playing or not
+    drawPlayButton();
 }
-
 
 /*************************************************************************
 // Custom functions
 **************************************************************************/
+// Reminder that arrays begin at ZERO and not at ONE!
 
+//-- drawOne() will draw the image at index 0 from the array
+drawOne = function () {
+    background(bgColors[0]);
+    image(images[0], width/3, height/2 + gTextOffset);
+    textFont(fonts[0]);
+    text(labels[0], 3*(width/4), height-mouseY);
+}
 
+//-- drawTwo() will draw the image at index 1 from the array
+drawTwo = function () {
+    background(bgColors[1]);
+    image(images[1], width/3, height/2 + gTextOffset);
+    push();
+    textSize(width/15);
+    textFont(fonts[1]);
+    text(labels[1], 3*(width/4), height-mouseY);
+    pop();
+}
+
+//-- drawThree() will draw the image at index 2 from the array
+drawThree = function () {
+    background(bgColors[2]);
+    image(images[2], width/3, height/2 + gTextOffset);
+    textFont(fonts[2]);
+    text(labels[2], 3*(width/4), height-mouseY);
+}
+
+//-- drawFour() will draw the image at index 3 from the array
+drawFour = function () {
+    background(bgColors[3]);
+    image(images[3], width/3, height/2 + gTextOffset);
+    textFont(fonts[3]);
+    text(labels[3], 3*(width/4), height-mouseY);
+}
+
+//-- drawFive() will draw the image at index 4 from the array
+drawFive = function () {
+    background(bgColors[4]);
+    image(images[4], width/3, height/2 + gTextOffset);
+    textFont(fonts[4]);
+    text(labels[4], 3*(width/4), height-mouseY);
+}
 
 
 
 /*************************************************************************
-// Fullscreen and debug functions
+// Control / interaction functions
 **************************************************************************/
-
-// Fullscreen message
-function fsMessage() {
-  // if (fs === true) {
-      push();
-      fill(255);
-      noStroke();
-      textSize(width/60);
-      textAlign(LEFT);
-      text("Press [F] for fullscreen", 0 + width/100 , height - height/100)
-      pop();
-    // }
-}
-
-// Get coordinates from click (dsable background)
-function mouseClicked() {
-    print(mouseX, mouseY);
-    fill(205);
-    ellipseMode(CENTER);
-    ellipse(mouseX, mouseY, 5, 5);
-}
-
-// Debug mode
-function drawDebugInfo() {
-  push();
+// Control/navigation instructions
+function instructMessage() {
+    push();
     fill(255);
     noStroke();
-    textSize(20);
-    text("X: " + mouseX + "   Y: " + mouseY, 20, 20);
-  pop();
+    textFont(defaultFont);
+    textSize(width/60);
+    text("Press [LEFT ARROW] and [RIGHT ARROW] to rotate moods", width/2, gTextOffset);
+    text("Click [LMB] to play/pause the ambience", width/2, gTextOffset+30);
+    text("Press [F] for fullscreen", width/2, gTextOffset+60);
+    stroke('#fff');
+    strokeWeight(3);
+    line(width/3, gTextOffset+75, 2*(width/3), gTextOffset+75);
+    pop();
 }
 
-// keyTyped for debugMode and fullscreen
-function keyTyped() {
-  if (key === 'd') {
-    gDebugMode = !gDebugMode;
+// Navigate the states (left arrow = go backwards, right arrow = go forwards) + fullscreen functionality
+function keyPressed() {
+    // Fullscreen
+    if (key === 'f') {
+        let fs = fullscreen();
+        fullscreen(!fs);
+    }
+    
+    // State machine interaction with number keys
+      // Array of function-variables (cannot be called before preload because these functions have not yet been created)
+      var imgFunctions = [drawOne, drawTwo, drawThree, drawFour, drawFive];
+
+    // Left arrow rotates states backwards
+    if (keyCode === LEFT_ARROW) {
+        // Stop the song playing
+        song[stateNumber].stop();
+        // Subtract one to the stateNumber
+        if (stateNumber > -1) {
+            stateNumber--;
+            } 
+        if (stateNumber < 0) {
+            stateNumber = 4;  
+            }
+        //  Call the function
+        drawFunction = imgFunctions[stateNumber];
+        // Play appropriate song
+        song[stateNumber].play();
+    }
+
+    // Right arrow rotates states forwards
+    else if (keyCode === RIGHT_ARROW) {
+        // Stop the song playing
+        song[stateNumber].stop();
+        // Add one to the stateNumber
+        if (stateNumber < 5) {
+            stateNumber++;
+            } 
+        if (stateNumber > 4) {
+            stateNumber = 0;  
+            }
+        //  Call the function
+        drawFunction = imgFunctions[stateNumber];
+        // Play appropriate song
+        song[stateNumber].play();
+    }
+}
+
+// On a mouse click, play or pause the ambience
+function mousePressed() {
+  if (song[stateNumber].isPlaying()) {
+    song[stateNumber].stop();
+  } 
+  else {
+    song[stateNumber].play();
   }
-  if (key === 'f') {
-    let fs = fullscreen();
-    fullscreen(!fs);
+}
+
+// Depending on if the ambience is playing or not, draw the play/pause button at the upper lefthand corner
+function drawPlayButton() {
+  push();
+  imageMode(CORNER);
+  textSize(20);
+  textFont(defaultFont);
+  textAlign(CENTER);
+  if (song[stateNumber].isPlaying()) {
+    image(playButton, 20, 20, 50, 50);
+    text("PLAYING", 50, 90);
+  } 
+  else {
+    image(pauseButton, 20, 20, 50, 50);
+    text("PAUSED", 50, 90);
   }
- }
+  pop();
+}
