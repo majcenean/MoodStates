@@ -1,6 +1,6 @@
-## Mood States
+## Mood States Redux
 ###### by Maj Jenkins
-February 16, 2021
+February 18, 2021
 
 ### Overview
 Test of setting up localhost, a state machine, and using sound in p5.js.
@@ -11,6 +11,9 @@ A written summary / tutorial on how to set up localhost on Windows 10 OS using P
 
 #### successful-localhost-setup.PNG
 What the localhost setup should look like (the address bar in browser says "localhost:8000").
+
+#### sketch (old).js
+The original sketch code for the Feb. 16 assignment which was added onto to create this assignment.
 
 #### assets/img folder
 5 mood drawings.
