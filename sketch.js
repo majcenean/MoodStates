@@ -31,6 +31,7 @@ var song = [];
 let playButton;
 let pauseButton;
 var instruct = ["INSTRUCTIONS", "________", "Press [LEFT ARROW] and [RIGHT ARROW] to rotate moods", "Click [LMB] to play/pause the ambience", "Press [F] for fullscreen", "Press [S] to return to the first state", "Press [I] to pull up this instruction screen again", "________", "PRESS [ESC] OR CLICK ANYWHERE TO CONTINUE"]
+var someguy;
 
 var gTextOffset = 50;
 
@@ -61,6 +62,7 @@ function preload() {
     images[3] = loadImage('assets/img/ocean.png');
     images[4] = loadImage('assets/img/outside.png');
     images[5] = loadImage('assets/img/splash.png');
+    someguy = loadImage('assets/img/some_guy.png');
   // Fonts
     fonts[0] = loadFont('assets/fonts/cloudlike.otf');
     fonts[1] = loadFont('assets/fonts/who_asks_satan.otf');
@@ -174,6 +176,11 @@ drawInstructions = function() {
     textSize(30);
     text(instruct[i], width/2, height/3.5+(i*gTextOffset));
   }
+
+// a fun little guy to keep you company in the instructions menu
+  let guyPos = map(mouseX, 100, width+100, 0, 100, true);
+  
+  image(someguy, guyPos, 2*(height/3))
 }
 
 // Array of function-variables (cannot be called before preload because these functions have not yet been created)

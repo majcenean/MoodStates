@@ -15,8 +15,11 @@ What the localhost setup should look like (the address bar in browser says "loca
 #### sketch (old).js
 The original sketch code for the Feb. 16 assignment which was added onto to create this assignment.
 
+#### assets/moods art385.mdp
+The editable FireAlpaca document of various mood drawings.
+
 #### assets/img folder
-5 mood drawings.
+5 mood drawings, a splash drawing, and a decoration drawing.
 
 #### assets/fonts folder
 ##### Cloudlike
